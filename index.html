@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e6e6e6;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .quiz-container {
+            background: grey;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .question {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .options button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            background: #d5d4ca;
+            color: rgb(2, 0, 0);
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .options button:hover {
+            background: #bcc1c9;
+            transform: scale(1.05);
+        }
+
+        .correct {
+            background: green !important;
+        }
+
+        .wrong {
+            background: red !important;
+        }
+
+        .emoji {
+            font-size: 24px;
+            margin-top: 5px;
+            animation: bounce 0.5s ease-in-out;
+        }
+
+        @keyframes bounce {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .result {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            color: yellow;
+            animation: fadeIn 1s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="quiz-container">
+        <h1>Quiz App</h1>
+        <div id="quiz"></div>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Which planet in our Solar System has thousands of spectacular rings around it?",
+                options: ["Neptune", "Saturn", "Uranus", "Jupiter"],
+                answer: "Saturn"
+            },
+            {
+                question: " Who founded Facebook?",
+                options: ["Kevin Systrom and Mike Krieger", "Jack Dorsey", "Mark Zuckerberg", "Evan Williams"],
+                answer: "Mark Zuckerberg"
+            },
+            {
+                question: " Which country has the most number of golf courses in the world?",
+                options: ["Beijing", "United States of America", "Tokyo", "Australia"],
+                answer: "United States of America"
+            }
+        ];
+
+        const quizContainer = document.getElementById("quiz");
+        const resultContainer = document.getElementById("result");
+        let wrongCount = 0;
+
+        questions.forEach((q, index) => {
+            const questionElement = document.createElement("div");
+            questionElement.classList.add("question");
+            questionElement.innerText = q.question;
+            quizContainer.appendChild(questionElement);
+
+            const optionsContainer = document.createElement("div");
+            optionsContainer.classList.add("options");
+
+            q.options.forEach(option => {
+                const button = document.createElement("button");
+                button.innerText = option;
+                button.onclick = () => {
+                    if (option === q.answer) {
+                        button.classList.add("correct");
+                        button.innerHTML += " 🤩";
+                    } else {
+                        button.classList.add("wrong");
+                        button.innerHTML += " 😢";
+                        wrongCount++;
+                    }
+                    // Disable all buttons after selection
+                    optionsContainer.querySelectorAll("button").forEach(btn => btn.disabled = true);
+
+                    if (index === questions.length - 1 && wrongCount >= 2) {
+                        setTimeout(() => {
+                            resultContainer.innerText = "Better luck next time! Keep practicing! 💪";
+                        }, 500);
+                    }
+                };
+                optionsContainer.appendChild(button);
+            });
+            quizContainer.appendChild(optionsContainer);
+        });
+    </script>
+</body>
+
+</html>
